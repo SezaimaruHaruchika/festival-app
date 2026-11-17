@@ -13,6 +13,8 @@ import Home from "./pages/Home/Home";
 import CampusSelection from "./pages/CampusSelection/CampusSelection";
 import Title from "./pages/Title/Title";
 import GameTutorial from "./components/Tutorial/GameTutorial";
+// ポートフォリオ公開用のデモ版であることを示す表示
+import DemoBadge from "./components/DemoBadge/DemoBadge";
 
 const QuestLoading = lazy(() => import("./pages/QuestLoading/QuestLoading"));
 const QrEntry = lazy(() => import("./pages/QrEntry/QrEntry"));
@@ -87,6 +89,7 @@ function App() {
       <BattleSessionProvider>
         <BrowserRouter>
           <div className="app">
+            <DemoBadge />
             <QrNoticeProvider>
             <GameTutorial>
               <Suspense fallback={<RouteFallback />}>

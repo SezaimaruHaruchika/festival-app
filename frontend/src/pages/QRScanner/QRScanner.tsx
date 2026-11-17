@@ -15,6 +15,7 @@ import {
   type CameraErrorKind,
 } from "../../utils/cameraError";
 import { useGameTutorial } from "../../components/Tutorial/useGameTutorial";
+import { DEMO_QR_HEADING, DEMO_QR_NOTE } from "../../demo";
 
 import "./QRScanner.css";
 
@@ -270,6 +271,7 @@ function QRScanner() {
     )
     : null;
 
+
   return (
     <main className="qr-scanner-page">
 
@@ -401,6 +403,27 @@ function QRScanner() {
         <p className="qr-error">
           {errorMessage}
         </p>
+      )}
+
+      {/* デモ版：会場のQRコードの代わりに、選んでいるエリアのクエストを並べる。
+          押すと、QRコードを読み取ったときと同じ処理（handleScanSuccess）で始まる。練習中は練習用のQRを使う。
+          会場でも討伐済みのクエストのQRを読み直せば何度でも狩猟できた（ランク上げの周回）ので、討伐済みも並べる */}
+      {!practice && (
+        <section className="qr-demo" aria-labelledby="qr-demo-heading">
+          <h2 id="qr-demo-heading">{DEMO_QR_HEADING}</h2>
+          <p>{DEMO_QR_NOTE}</p>
+          {quests.length === 0 && <p>エリアを選んでから、ホームのクエストを開いてください。</p>}
+          <ul>
+            {quests.map((quest) => (
+              <li key={quest.id}>
+                <button type="button" className="qr-demo-button" onClick={() => handleScanSuccess(quest.qrCode)}>
+                  <span>{quest.title}</span>
+                  {quest.completed && <span className="qr-demo-done">討伐済み</span>}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
     </main>

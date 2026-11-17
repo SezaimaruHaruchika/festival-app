@@ -61,7 +61,8 @@ function Progress() {
       status: wallpaper.reached
         ? `ハンターランク ${wallpaper.requiredRank} に到達しました`
         : `今のハンターランク ${wallpaper.rank} / ${wallpaper.requiredRank}`,
-      highlight: false,
+      // 壁紙をもらえるランクに届いたら、ほかの「できること」と同じように枠を強調する
+      highlight: wallpaper.reached,
     },
     {
       to: "/progress/fields",

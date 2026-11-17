@@ -1,0 +1,31 @@
+/* 画面上部の中央に固定する「デモ版」の表示（色・余白・重なり順は global.css の変数を使う） */
+.demo-badge {
+  position: fixed;
+  top: var(--space-1);
+  left: 50%;
+  z-index: var(--z-banner);
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 2px var(--space-3);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  background: var(--color-overlay);
+  color: var(--color-accent);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  white-space: nowrap;
+  /* 下にあるヘッダーのボタンなどを押せるようにする */
+  pointer-events: none;
+}
+
+/* 画面には出さず、読み上げだけする説明 */
+.demo-badge .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

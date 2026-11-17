@@ -1,29 +1,26 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import SwipeToConfirm from "../../components/SwipeToConfirm/SwipeToConfirm";
 import { useGameTutorial } from "../../components/Tutorial/useGameTutorial";
 import { useGame } from "../../context/GameContext";
 import { useMapAreas } from "../../context/useMapAreas";
+import { DEMO_NOVELTY_NOTE } from "../../demo";
 import { getFieldProgress, getRedeemConditionText } from "../../utils/fieldProgress";
 
 import "./NoveltyRedeem.css";
 
-// フィールドのステッカーをフォトスポットで交換する画面
+// フィールドのステッカーをフォトスポットで交換する画面。
+// デモ版では交換の操作（スライドで確定）を出さず、交換できない理由を表示する
 function NoveltyRedeem() {
   const navigate = useNavigate();
   // 交換画面へは進捗のステッカーの画面から進むので、そこへ戻る
   const back = { to: "/progress/stickers", label: "ステッカーの画面へ戻る", replace: false };
   const { fieldId: fieldIdParam } = useParams();
-  const { campusId, quests, obtainedFieldNoveltyIds, requiresUpdate, claimFieldNovelty } = useGame();
+  const { campusId, quests, obtainedFieldNoveltyIds, requiresUpdate } = useGame();
   const { active: practice } = useGameTutorial();
 
   const mapAreas = useMapAreas();
   const area = mapAreas.find((item) => String(item.id) === fieldIdParam);
   const progress = area ? getFieldProgress(area, quests, obtainedFieldNoveltyIds, mapAreas) : null;
-
-  const canRedeem = Boolean(
-    area && campusId && progress?.redeemable && !progress.noveltyObtained && !practice,
-  );
 
   if (!area || !progress) {
     return (
@@ -37,10 +34,6 @@ function NoveltyRedeem() {
       </main>
     );
   }
-
-  // スワイプで確定したら、この端末に交換済みとして記録する
-  // （ステッカーはアナログのスタンプラリーでも配るため、在庫はアプリでは数えない）
-  const handleConfirm = () => canRedeem && claimFieldNovelty(area.id);
 
   return (
     <main className="novelty-page">
@@ -68,17 +61,8 @@ function NoveltyRedeem() {
         ) : !campusId ? (
           <p className="novelty-note">エリアを選んでから交換してください。</p>
         ) : (
-          <>
-            <p className="novelty-guide">
-              フォトスポットのスタッフの前で、つまみを右端までスライドしてください。
-            </p>
-
-            <SwipeToConfirm
-              label="右にスライドして交換"
-              confirmedLabel="交換しました"
-              onConfirm={handleConfirm}
-            />
-          </>
+          // 交換できる条件はそろっているが、デモ版なので交換はできない
+          <p className="novelty-note">{DEMO_NOVELTY_NOTE}</p>
         )}
 
         <Link className="novelty-back" to={back.to} replace={back.replace}>
